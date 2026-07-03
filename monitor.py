@@ -6,7 +6,7 @@ import re
 
 # --- CONFIG ---
 TOKEN = os.getenv("CACHE_BOT")
-CHAT_ID = os.getenv("CHAT_ID")
+CHAT_ID = os.getenv("CACHE_CHAT")
 DATA_FILE = "data.json"  # References the data.json in your repository
 
 def clean_text(text):
