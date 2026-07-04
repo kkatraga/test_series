@@ -84,7 +84,7 @@ def send_exam_quiz(q_data):
     if "file_link" in q_data and q_data["file_link"]:
         link = q_data["file_link"]
         file_label = "test.pdf" if "test.pdf" in link else f"Source File (Q.{q_data['question_number']})"
-        explanation_text = f"Source Reference: [{file_label}]({link})"
+        explanation_text = f"{link}"
         
         # SAFEGUARD: Telegram allows max 200 characters for the entire explanation string.
         # If the generated URL is too long, drop the markdown formatting and just send the raw link.
