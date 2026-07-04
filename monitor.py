@@ -125,7 +125,7 @@ def main():
         iterations=480_000,
     )
 
-    key = base64.urlsafe_b64encode(kdf.derive(password))
+    key = base64.urlsafe_b64encode(kdf.derive(encryption_key))
     
     fernet = Fernet(key)
 
