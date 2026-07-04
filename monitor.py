@@ -3,11 +3,13 @@ import json
 import random
 import requests
 import re
+from cryptography.fernet import Fernet
 
 # --- CONFIG ---
 TOKEN = os.getenv("CACHE_BOT")
 CHAT_ID = os.getenv("CACHE_CHAT")
-DATA_FILE = "combined_output (1).json"  # References the data.json in your repository
+encryption_key_str = os.getenv("KEY")
+DATA_FILE = "data.json"  # References the data.json in your repository
 
 def clean_text(text):
     """
@@ -121,6 +123,32 @@ def main():
     except Exception as e:
         print(f"Error reading JSON file data: {e}")
         return
+
+    fernet = Fernet(encryption_key_str.encode())
+
+    # Select random file
+    file_num = random.randint(1,173)
+
+    #random_encrypted_file_path = str(file_num)+".json.enc"
+    random_encrypted_file_path = "1.json.enc"
+
+    try:
+        with open(random_encrypted_file_path, 'rb') as f_enc:
+            encrypted_content = f_enc.read()
+
+        # Decrypt the content
+        decrypted_content_bytes = fernet.decrypt(encrypted_content)
+        decrypted_content_str = decrypted_content_bytes.decode() # Decode bytes to string
+
+        # Parse and display the JSON content (without saving to disk)
+        questions_list = json.loads(decrypted_content_str)
+        #print(json.dumps(random_file_content, indent=2))
+
+    except json.JSONDecodeError:
+        print(f"Error decoding JSON from random encrypted file: {random_encrypted_file}")
+    except Exception as e:
+        print(f"An error occurred while reading or decrypting the random file {random_encrypted_file}: {e}")
+        
 
     if not questions_list or not isinstance(questions_list, list):
         print("Error: data.json does not contain a valid list of questions.")
